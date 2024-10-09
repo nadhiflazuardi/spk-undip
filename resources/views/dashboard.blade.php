@@ -28,7 +28,7 @@
                     <table id="pribadiTable" class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" class="text-center" style="color: #144272">Tugas</th>
+                                <th scope="col" class="text-center w-25" style="color: #144272">Tugas</th>
                                 <th scope="col" class="text-center" style="max-width: 50px; color: #144272">Target</th>
                                 <th scope="col" class="text-center" style="max-width: 50px; color: #144272">Terpenuhi
                                 </th>
@@ -36,66 +36,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Presensi</td>
-                                <td class="text-center">{{ $jumlahHariKerja }} hari</td>
-                                <td class="text-center">{{ $logPresensi[0]['total_bobot'] / 450 }} hari</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div class="progress w-100" style="height: 10px" role="progressbar"
-                                            aria-label="Basic example" aria-valuenow="{{ ($logPresensi[0]['total_bobot'] / 450)*100/$jumlahHariKerja }}" aria-valuemin="0"
-                                            aria-valuemax="100">
-                                            <div class="progress-bar" style="width: {{ ($logPresensi[0]['total_bobot'] / 450)*100/$jumlahHariKerja }}%; background-color: #144272"></div>
-                                        </div>
-                                        <span class="fs-4 fw-semibold">{{ ($logPresensi[0]['total_bobot'] / 450)*100/$jumlahHariKerja }}%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Rapat</td>
-                                <td class="text-center">{{ $rapatDurationTarget[0] }} menit</td>
-                                <td class="text-center">{{ $logRapat[0]['total_bobot'] }} menit</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div class="progress w-100" style="height: 10px" role="progressbar"
-                                            aria-label="Basic example" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100">
-                                            <div class="progress-bar" style="width: 50%; background-color: #144272"></div>
-                                        </div>
-                                        <span class="fs-4 fw-semibold">50%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Perjalanan Dinas</td>
-                                <td class="text-center">1000</td>
-                                <td class="text-center">2000</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div class="progress w-100" style="height: 10px" role="progressbar"
-                                            aria-label="Basic example" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100">
-                                            <div class="progress-bar" style="width: 50%; background-color: #144272"></div>
-                                        </div>
-                                        <span class="fs-4 fw-semibold">50%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Surat</td>
-                                <td class="text-center">1000</td>
-                                <td class="text-center">2000</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-4">
-                                        <div class="progress w-100" style="height: 10px" role="progressbar"
-                                            aria-label="Basic example" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100">
-                                            <div class="progress-bar" style="width: 50%; background-color: #144272"></div>
-                                        </div>
-                                        <span class="fs-4 fw-semibold">50%</span>
-                                    </div>
-                                </td>
-                            </tr>
+                            @foreach ($logs as $log)
+                                <tr>
+                                    <td>{{ $log['nama'] }}</td>
+                                    @if ($log['target'] == 0)
+                                        <td class="text-center">-</td>
+                                    @else
+                                        <td class="text-center">{{ $log['target'] }} menit</td>
+                                    @endif
+                                    <td class="text-center">{{ $log['total'] }} menit</td>
+                                    <td>
+                                        @if ($log['target'] == 0)
+                                            <div class="text-center">-</div>
+                                        @else
+                                            <div class="d-flex align-items-center gap-1">
+                                                <div class="progress w-100" style="height: 10px" role="progressbar"
+                                                    aria-label="Basic example"
+                                                    aria-valuenow="{{ round(($log['total'] * 100) / $log['target']) }}"
+                                                    aria-valuemin="0" aria-valuemax="100">
+
+                                                    <div class="progress-bar"
+                                                        style="width: {{ round(($log['total'] * 100) / $log['target']) }}%; background-color: #144272">
+                                                    </div>
+                                                </div>
+                                                <span class="fs-6 fw-semibold">
+                                                    {{ round(($log['total'] * 100) / $log['target']) }}%</span>
+                                            </div>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
