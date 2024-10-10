@@ -20,13 +20,12 @@
       </div>
       <div class="container">
         <div class="border-bottom border-black">
-          <h1 class="ms-3">Dashboard</h1>
+          <h1>Rekapitulasi Kinerja Pegawai Tahun {{ now()->format('Y') }}</h1>
         </div>
         <br>
         <div>
           <div class="d-flex align-items-center justify-content-between">
-            <h2>Rekapitulasi Kinerja Pribadi</h2>
-            <button class="btn btn-outline-primary">Lihat Detail Kinerja</button>
+            <h2>{{ $pegawai->nama }}</h2>
           </div>
           <table id="pribadiTable" class="table table-striped">
             <thead>
@@ -71,33 +70,6 @@
             </tbody>
           </table>
         </div>
-        @can('revisi')
-          <div>
-            <div class="d-flex align-items-center justify-content-between">
-              <h2>Rekapitulasi Kinerja Pegawai</h2>
-            </div>
-            <table id="bawahanTable" class="table table-striped display">
-              <thead>
-                <tr>
-                  <th scope="col" class="text-center w-25">NIP</th>
-                  <th scope="col" class="text-center">Nama</th>
-                  <th scope="col" class="text-center w-25">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach ($bawahans as $bawahan)
-                  <tr>
-                    <td class="text-center">{{ $bawahan['id'] }}</td>
-                    <td>{{ $bawahan['nama'] }}</td>
-                    <td class="text-center">
-                      <a href="{{ route('kinerja.show', ['id' => $bawahan['id']]) }}" class="btn btn-outline-primary">Lihat Detail Kinerja</a>
-                    </td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
-        @endcan
       </div>
     </div>
   </div>
@@ -106,7 +78,6 @@
 @section('scripts')
   <script>
     $(document).ready(function() {
-      $('#bawahanTable').DataTable();
       $('#pribadiTable').DataTable();
 
       // hide datatable pagination and search, but only the first occurence

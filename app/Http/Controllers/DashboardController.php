@@ -13,27 +13,38 @@ use Illuminate\Support\Facades\Http;
 
 class DashboardController extends Controller
 {
-    public function index()
-    {
-        $title = 'Dashboard';
+  public function index()
+  {
+    $title = 'Dashboard';
 
-        $jumlahHariKerja = Hari::hitungHariKerja();
+    $jumlahHariKerja = Hari::hitungHariKerja();
 
-        // Ambil ID user yang login
-        $userId = Auth::id();
+    // Ambil ID user yang login
+    $userId = Auth::id();
 
-        // Fetch data log dari API
-        $logResponse = Http::get("http://e-office-undip.test/api/log/{$userId}");
+    // Fetch data log dari API
+    $logResponse = Http::get("http://e-office-undip.test/api/log/{$userId}");
 
-        // Cek apakah request berhasil
-        if ($logResponse->successful()) {
-            // Olah data yang didapat
-            $logs = collect($logResponse->json('data')); // Ini mengubah response ke array
-        } else {
-            // Handle error, misalnya
-            $logs = []; // Atau bisa juga return error message
-        }
-        
-        return view('dashboard', compact('title', 'jumlahHariKerja', 'logs'));
+    // Cek apakah request berhasil
+    if ($logResponse->successful()) {
+      // Olah data yang didapat
+      $logs = collect($logResponse->json('data')); 
+    } else {
+      $logs = []; 
     }
+
+    if (auth()->user()->hasRole('Supervisor')) {
+      $bawahanResponse =  Http::get("http://e-office-undip.test/api/bawahan/{$userId}");
+
+      if ($bawahanResponse->successful()) {
+        $bawahans = collect($bawahanResponse->json('data')); 
+      } else {
+        $bawahans = []; 
+      }
+
+      return view('dashboard', compact('title', 'jumlahHariKerja', 'logs', 'bawahans'));
+    }
+
+    return view('dashboard', compact('title', 'jumlahHariKerja', 'logs'));
+  }
 }
