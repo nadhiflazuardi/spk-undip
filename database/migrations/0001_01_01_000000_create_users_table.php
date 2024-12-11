@@ -16,6 +16,9 @@ return new class extends Migration
             $table->string('nama');
             $table->string('email')->unique();
             $table->string('password');
+            $table->foreignId('unit_kerja_id')->constrained('unit_kerjas');
+            $table->foreignId('jabatan_id')->constrained('jabatans');
+            $table->foreignId('supervisor_id')->nullable()->constrained('users');
             $table->rememberToken();
             $table->timestamps();
         });
