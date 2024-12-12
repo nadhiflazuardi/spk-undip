@@ -182,9 +182,9 @@
                                     @if ($log['target'] == 0)
                                         <td class="text-center">-</td>
                                     @else
-                                        <td class="text-center">{{ $log['target'] }} menit</td>
+                                        <td class="text-center">{{ number_format($log['target'],0) }} menit</td>
                                     @endif
-                                    <td class="text-center">{{ $log['total'] }} menit</td>
+                                    <td class="text-center">{{ number_format($log['total'],0) }} menit</td>
                                     <td>
                                         @if ($log['target'] == 0)
                                             <div class="text-center">-</div>
@@ -260,7 +260,10 @@
             const toastGagal = new bootstrap.Toast(document.getElementById('toastGagal'));
             // Function untuk render baris tabel
             function renderTableRow(log) {
-                let targetCell = log.target == 0 || log.target == null ? '-' : `${log.target} menit`;
+                let targetCell = log.target == 0 || log.target == null ? '-' : `${log.target.toLocaleString('en-US', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+})  } menit`;
                 let percentageCell = '';
 
                 if (log.target == 0) {
@@ -286,7 +289,10 @@
             <tr>
                 <td>${log.nama}</td>
                 <td class="text-center">${targetCell}</td>
-                <td class="text-center">${log.total} menit</td>
+                <td class="text-center">${log.total.toLocaleString('en-US', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0
+})} menit</td>
                 <td>${percentageCell}</td>
             </tr>
         `;
